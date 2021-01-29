@@ -9,57 +9,137 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+const { type } = require("os");
+const { finished } = require("stream");
+
+// Array to store employee info
+const employees = [];
 
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-const employeeQs = [
-    {
-        name: "name",
-        type: "input",
-        message: "Please enter your first and last name.",
-    },
-    {
-        name: "id",
-        type: "input",
-        message: "Please enter your employee ID number.",
-    },
-    {
-        name: "email",
-        type: "input",
-        message: "Please enter your email address.",
-    },
-    {
-        name: "role",
-        type: "list",
-        message: "Please select your role from the list.",
-        choices: ["Manager", "Engineer", "Intern"],
-    },
-]
+function profileGenerator() {
+    inquirer
+        .prompt([
+            {
+                name: "name",
+                type: "input",
+                message: "Team Manager, please enter your first and last name.",
+            },
+            {
+                name: "id",
+                type: "input",
+                message: "Please enter your employee ID number.",
+            },
+            {
+                name: "email",
+                type: "input",
+                message: "Please enter your email address.",
+            },
+            {
+                name: "officeNumber",
+                type: "input",
+                message: "Please enter your office phone number.",
+            },
+        ])
+        .then(data => {
+            let manager = new Manager(data.name, data.id, data.email, data.officeNumber);
+            employees.push(manager);
+            addEmplyee();
+        });
+}
 
-const officeNumber = [
-    {
-        name: "officeNumber",
-        type: "input",
-        message: "Please enter your office number.",
-    },
+function addEmplyee() {
+    inquirer
+        .prompt([
+            {
+                name: "role",
+                type: "list",
+                message: 'Add another employee or select "Finished".',
+                choices: ["Engineer", "Intern", "Finished"],
+            },
+        ])
+        .then(choice => {
+            if (choice === "Engineer") {
+                addEngineer();
+            }
+            else if (choice === "Intern") {
+                addIntern();
+            }
+            else {
+                finished();
+            }
+        })
+}
 
-]
-const github = [
-    {
-        name: "github",
-        type: "input",
-        message: "Please enter your GitHub username.",
-    },
-]
+function addEngineer() {
+    inquirer
+        .prompt([
+            {
+                name: "name",
+                type: "input",
+                message: "Please enter your Engineer's first and last name.",
+            },
+            {
+                name: "id",
+                type: "input",
+                message: "Please enter your Engineer's employee ID number",
+            },
+            {
+                name: "email",
+                type: "input",
+                message: "Please enter your Engineer's email address",
+            },
+            {
+                name: "github",
+                type: "input",
+                message: "Please enter your Engineer's GitHub username.",
+            },
+        ])
+        .then(data => {
+            let engineer = new Engineer(data.name, data.id, data.email, data.github);
+            employees.push(engineer);
+            addEmplyee();
+        });
+}
 
-const school = [
-    {
-        name: "school",
-        type: "input",
-        message: "Please enter your school name.",
-    },
-]
+function addIntern() {
+    inquirer
+        .prompt([
+            {
+                name: "name",
+                type: "input",
+                message: "Please enter your Intern's first and last name.",
+            },
+            {
+                name: "id",
+                type: "input",
+                message: "Please enter your Intern's employee ID number.",
+            },
+            {
+                name: "email",
+                type: "input",
+                message: "Please enter your Intern's email address.",
+            },
+            {
+                name: "school",
+                type: "input",
+                message: "Please enter your Intern's school name.",
+            },
+        ])
+        .then(data => {
+            let intern = new Intern(data.name, data.id, data.email, data.school);
+            employees.push(intern);
+            addEmplyee();
+        });
+}
+
+function finished() {
+    fs.writeFileSync(outputPath, render(employees));
+    console.log("Finished");
+}
+
+profileGenerator();
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
