@@ -1,9 +1,26 @@
-/* jumbotron background color scarlet */
-.jumbotron {
-    background-color: #ff2400;
-}
-/* jumbotron text gold */
-h1 {
-    color: gold;
+/* body background color, font family */
+body {
+    background-color: lightgray;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
+/* jumbotron color */
+.jumbotron {
+    background-color: #5085a5;
+}
+
+/* heading font color and style */
+h1, h2, h3 {
+    color: #f7f9fb;
+    font-weight: bold;
+}
+
+/* card headers */
+.card-header {
+    background-color: #5085a5;
+}
+
+/* card body */
+.card-body {
+    background-color: #f7f9fb;
+}
