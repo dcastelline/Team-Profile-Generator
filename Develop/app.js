@@ -9,8 +9,6 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
-const { type } = require("os");
-const { finished } = require("stream");
 
 // Array to store employee info
 const employees = [];
@@ -55,19 +53,19 @@ function addEmplyee() {
             {
                 name: "role",
                 type: "list",
-                message: 'Add another employee or select "Finished".',
-                choices: ["Engineer", "Intern", "Finished"],
+                message: 'Add another employee or select "Complete".',
+                choices: ["Engineer", "Intern", "Complete"],
             },
         ])
         .then(choice => {
-            if (choice === "Engineer") {
+            if (choice.role === "Engineer") {
                 addEngineer();
             }
-            else if (choice === "Intern") {
+            else if (choice.role === "Intern") {
                 addIntern();
             }
             else {
-                finished();
+                complete();
             }
         })
 }
@@ -134,9 +132,9 @@ function addIntern() {
         });
 }
 
-function finished() {
+function complete() {
     fs.writeFileSync(outputPath, render(employees));
-    console.log("Finished");
+    console.log("Complete");
 }
 
 profileGenerator();

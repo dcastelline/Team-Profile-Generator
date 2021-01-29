@@ -1,0 +1,9 @@
+/* jumbotron background color scarlet */
+.jumbotron {
+    background-color: #ff2400;
+}
+/* jumbotron text gold */
+h1 {
+    color: gold;
+}
+
